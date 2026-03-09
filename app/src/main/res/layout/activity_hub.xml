@@ -17,29 +17,35 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.038" />
+        app:layout_constraintVertical_bias="0.103" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="411dp"
-        android:layout_height="65dp"
+        android:layout_width="398dp"
+        android:layout_height="44dp"
         android:layout_marginStart="4dp"
-        android:background="#C9BBBB"
+        android:layout_marginBottom="16dp"
+        android:background="@android:drawable/ic_notification_overlay"
+        android:backgroundTint="#F7CFD4"
         android:minHeight="?attr/actionBarSize"
+        android:scaleType="fitXY"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintCircleRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.222"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="65dp"
         android:layout_height="72dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logobg" />
@@ -60,13 +66,4 @@
             android:orientation="vertical"></LinearLayout>
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/settingGear"
-        android:layout_width="64dp"
-        android:layout_height="51dp"
-        android:layout_marginBottom="7dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:srcCompat="@drawable/settings" />
 </androidx.constraintlayout.widget.ConstraintLayout>
