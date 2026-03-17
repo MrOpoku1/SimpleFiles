@@ -6,113 +6,310 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#242222"
-    tools:context=".MainActivity">
+    android:background="#242222">
 
-    <!-- File Content Display -->
     <ImageView
         android:id="@+id/logo"
         android:layout_width="17dp"
         android:layout_height="14dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logobg" />
 
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="125dp"
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="47dp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView"
-        app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintHorizontal_bias="0.222"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:background="#1a1818"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.434" />
+        app:layout_constraintStart_toEndOf="@id/logo"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="124dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView"
-        app:layout_constraintEnd_toEndOf="parent"
+        <Button
+            android:id="@+id/btnOpenFile"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_dark_rounded"
+            app:backgroundTint="@null"
+            android:text="Open"
+            android:textSize="12sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:text="Search"
+            android:textSize="12sp"
+            android:background="@drawable/btn_dark_rounded"
+            app:backgroundTint="@null"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/btnShare"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:text="Share"
+            android:textSize="12sp"
+            android:background="@drawable/btn_dark_rounded"
+            app:backgroundTint="@null"
+            tools:ignore="TouchTargetSizeCheck" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:background="#1a1818"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/navPanel">
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="390dp"
-        android:layout_height="637dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_scrollview"
-        android:clipToOutline="true"
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="Find in file..."
+            android:textColor="#e8e2d9"
+            android:textColorHint="#7a7270"
+            android:textSize="13sp"
+            android:background="@drawable/rounded_scrollview"
+            android:paddingStart="10dp"
+            android:inputType="text"
+            android:imeOptions="actionSearch" />
+
+        <Button
+            android:id="@+id/btnSearchPrev"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:text="↑"
+            android:textSize="14sp"
+            android:background="@drawable/btn_dark_rounded"
+            app:backgroundTint="@null" />
+
+        <Button
+            android:id="@+id/btnSearchNext"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:text="↓"
+            android:textSize="14sp"
+            android:background="@drawable/btn_dark_rounded"
+            app:backgroundTint="@null" />
+
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintBottom_toTopOf="@id/statusBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/navPanel">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ScrollView
+                android:id="@+id/lineNumberScroll"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:background="#1a1818"
+                android:overScrollMode="never"
+                android:verticalScrollbarStyle="insideInset">
+
+                <TextView
+                    android:id="@+id/lineNumbers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:textSize="13sp"
+                    android:textColor="#7a7270"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="6dp"
+                    android:gravity="end"
+                    android:text="1\n2\n3" />
+            </ScrollView>
+
+            <ScrollView
+                android:id="@+id/contentScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_scrollview"
+                android:overScrollMode="never">
+
+                <TextView
+                    android:id="@+id/fileContentText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:textSize="14sp"
+                    android:textColor="#b0a9a2"
+                    android:padding="8dp"
+                    android:text="Open a file to begin reading..." />
+            </ScrollView>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <ProgressBar
+        android:id="@+id/loadingSpinner"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:indeterminateTint="#c8a96e"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@id/statusBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/navPanel" />
+
+    <LinearLayout
+        android:id="@+id/statusBar"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:background="#1a1818"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo"
-        app:layout_constraintVertical_bias="0.648">
+        app:layout_constraintEnd_toStartOf="@id/navPanel">
 
         <TextView
-            android:id="@+id/fileContentText"
+            android:id="@+id/statusLines"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lines: 0"
+            android:textColor="#7a7270"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/statusChars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chars: 0"
+            android:textColor="#7a7270"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/statusEncoding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UTF-8"
+            android:textColor="#7a7270"
+            android:textSize="11sp"
+            android:fontFamily="monospace" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/navPanel"
+        android:layout_width="56dp"
+        android:layout_height="0dp"
+        android:background="#1a1818"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:padding="12dp"
-            android:text="File content will appear here..."
-            android:textColor="#333333"
-            android:textSize="14sp" />
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp">
+
+            <Button
+                android:id="@+id/btnFontUp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginBottom="8dp"
+                android:text="A+"
+                android:textSize="11sp"
+                android:background="@drawable/btn_dark_rounded"
+                app:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/btnFontDown"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginBottom="8dp"
+                android:text="A−"
+                android:textSize="11sp"
+                android:background="@drawable/btn_dark_rounded"
+                app:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/btnWordWrap"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginBottom="8dp"
+                android:text="Wrap"
+                android:textSize="9sp"
+                android:background="@drawable/btn_dark_rounded"
+                app:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/btnGoToLine"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginBottom="8dp"
+                android:text="# Ln"
+                android:textSize="9sp"
+                android:background="@drawable/btn_dark_rounded"
+                app:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/btnCopyAll"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:text="Copy"
+                android:textSize="9sp"
+                android:background="@drawable/btn_dark_rounded"
+                app:backgroundTint="@null"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
+
     </ScrollView>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="125dp"
-        android:layout_height="49dp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="133dp"
-        android:layout_height="732dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="341dp"
-        tools:layout_editor_absoluteY="-1dp">
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints" />
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints" />
-
-        <Button
-            android:id="@+id/button8"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints" />
-    </com.google.android.material.navigation.NavigationView>
-
-    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

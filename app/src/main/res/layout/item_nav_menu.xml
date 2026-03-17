@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="6dp"
+    app:cardBackgroundColor="#2e2b2b"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:strokeColor="#3a3636"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:id="@+id/navItemRow"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <ImageView
+            android:id="@+id/dragHandle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_drag_handle"
+            android:contentDescription="Drag to reorder" />
+
+        <TextView
+            android:id="@+id/itemLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#e8e2d9"
+            android:textSize="13sp"
+            android:fontFamily="monospace"
+            tools:text="A+ (Font Up)" />
+
+        <Button
+            android:id="@+id/btnRename"
+            android:layout_width="52dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:text="Edit"
+            android:textSize="10sp"
+            android:background="@drawable/btn_dark_rounded"
+            app:backgroundTint="@null"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/toggleVisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
