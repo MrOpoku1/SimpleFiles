@@ -19,6 +19,7 @@ public class HubActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_hub);
+
         thumbnail = (ImageView)findViewById(R.id.thumbnail);
 
 
