@@ -75,7 +75,7 @@
                     android:clickable="true">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/thumbNail"
+                        android:id="@+id/thumbnail"
                         android:layout_width="127dp"
                         android:layout_height="179dp"
                         android:layout_marginStart="16dp"
@@ -91,7 +91,7 @@
                         android:layout_height="115dp"
                         android:layout_marginStart="8dp"
                         android:orientation="vertical"
-                        app:layout_constraintStart_toEndOf="@+id/thumbNail"
+                        app:layout_constraintStart_toEndOf="@+id/thumbnail"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
