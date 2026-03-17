@@ -1,4 +1,4 @@
-// NavItemAdapter.java
+package com.example.simplefiles;// com.example.simplefiles.NavItemAdapter.java
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,7 +7,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.simplefiles.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.util.Collections;
 import java.util.List;

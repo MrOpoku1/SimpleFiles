@@ -1,14 +1,13 @@
 // CustomizeNavActivity.java
+
+package com.example.simplefiles;
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.simplefiles.R;
 
 import java.util.ArrayList;
 import java.util.List;

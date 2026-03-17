@@ -26,7 +26,7 @@ public class HubActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(HubActivity.this, CustomizationMenu.class);
+                Intent intent = new Intent(HubActivity.this, CustomizeNavActivity.class);
                 startActivity(intent);
             }
         });

@@ -1,4 +1,6 @@
-// NavItem.java
+package com.example.simplefiles;
+
+// com.example.simplefiles.NavItem.java
 public class NavItem {
     private String id;
     private String label;
