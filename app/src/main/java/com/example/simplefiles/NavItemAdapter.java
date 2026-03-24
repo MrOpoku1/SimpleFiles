@@ -13,16 +13,17 @@ import java.util.List;
 
 public class NavItemAdapter extends RecyclerView.Adapter<NavItemAdapter.NavViewHolder> {
 
-    public interface OnRenameClickListener {
-        void onRename(NavItem item, int position);
+    private final List<NavItem> items;
+    public interface OnSettingsClickListener {
+        void onSettings(NavItem item, int position);
     }
 
-    private final List<NavItem> items;
-    private final OnRenameClickListener renameListener;
+    // Update constructor
+    private final OnSettingsClickListener settingsListener;
 
-    public NavItemAdapter(List<NavItem> items, OnRenameClickListener renameListener) {
+    public NavItemAdapter(List<NavItem> items, OnSettingsClickListener settingsListener) {
         this.items = items;
-        this.renameListener = renameListener;
+        this.settingsListener = settingsListener;
     }
 
     @NonNull
@@ -45,8 +46,8 @@ public class NavItemAdapter extends RecyclerView.Adapter<NavItemAdapter.NavViewH
         holder.toggle.setOnCheckedChangeListener((buttonView, isChecked) ->
                 item.setVisible(isChecked));
 
-        holder.btnRename.setOnClickListener(v ->
-                renameListener.onRename(item, holder.getAdapterPosition()));
+        holder.btnSettings.setOnClickListener(v ->
+                settingsListener.onSettings(item, holder.getAdapterPosition()));
     }
 
     @Override
@@ -68,13 +69,13 @@ public class NavItemAdapter extends RecyclerView.Adapter<NavItemAdapter.NavViewH
     static class NavViewHolder extends RecyclerView.ViewHolder {
         TextView label;
         SwitchMaterial toggle;
-        Button btnRename;
+        Button btnSettings;
 
         NavViewHolder(@NonNull View itemView) {
             super(itemView);
             label     = itemView.findViewById(R.id.itemLabel);
             toggle    = itemView.findViewById(R.id.toggleVisible);
-            btnRename = itemView.findViewById(R.id.btnRename);
+            btnSettings = itemView.findViewById(R.id.btnSettings);
         }
     }
 }
