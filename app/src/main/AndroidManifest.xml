@@ -13,7 +13,7 @@
         android:theme="@style/Theme.SimpleFiles" >
         <activity
             android:name=".HubActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.SimpleFiles.NoActionBar" >
             <intent-filter>

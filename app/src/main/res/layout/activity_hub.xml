@@ -5,13 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:backgroundTint="#242222"
+    android:background="#242222"
     tools:context=".MainActivity">
+
+    <!-- FIX 1: Removed android:backgroundTint="#242222" from root layout -->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#B49191"
         android:minHeight="?attr/actionBarSize"
@@ -22,23 +23,23 @@
 
     <SearchView
         android:id="@+id/searchView"
-        android:layout_width="260dp"
-        android:layout_height="31dp"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
         android:queryHint="Search"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.364"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintStart_toEndOf="@+id/logo"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.484">
+        app:layout_constraintVertical_bias="0.5" />
 
-    </SearchView>
+    <!-- FIX 2: SearchView vertical_bias changed from 0.1 to 0.5 to center in toolbar -->
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="55dp"
         android:layout_height="53dp"
+        android:contentDescription="TODO"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,133 +47,139 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="414dp"
-        android:layout_height="791dp"
-        android:layout_marginBottom="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="90dp"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.961">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/FileItem"
+            <!-- FIX 3: Inner ConstraintLayout height changed from match_parent to wrap_content -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/lightPink"
-                app:cardCornerRadius="20dp">
+                android:layout_height="wrap_content">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="416dp"
-                    android:layout_height="match_parent"
-                    android:clickable="true">
+                <!-- FIX 4: CardView height changed from match_parent to wrap_content -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/FileItem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/lightPink"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/thumbnail"
-                        android:layout_width="127dp"
-                        android:layout_height="179dp"
-                        android:layout_marginStart="16dp"
-                        android:clickable="true"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:shapeAppearanceOverlay="@style/RoundedCorners"
-                        app:srcCompat="@drawable/ic_launcher_background" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="275dp"
-                        android:layout_height="115dp"
-                        android:layout_marginStart="8dp"
-                        android:orientation="vertical"
-                        app:layout_constraintStart_toEndOf="@+id/thumbnail"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:id="@+id/fileHeader"
-                            android:layout_width="281dp"
-                            android:layout_height="46dp"
-                            android:autoText="false"
-                            android:fontFamily="serif"
-                            android:gravity="center"
-                            android:text="&quot;Title&quot;"
-                            android:textAlignment="viewStart"
-                            android:textColor="@color/black"
-                            android:textSize="30sp"
-                            android:textStyle="bold"
-                            app:autoSizeMinTextSize="50dp" />
-
-                        <TextView
-                            android:id="@+id/DateModified"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="date"
-                            android:textSize="15dp" />
-
-                        <TextView
-                            android:id="@+id/Size"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="File size" />
-
-                    </LinearLayout>
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/floatingActionButton"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="123dp"
-                        android:layout_marginEnd="32dp"
                         android:clickable="true"
-                        app:backgroundTint="@color/lightPink"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toStartOf="@+id/thumbnail"
-                        app:layout_constraintTop_toTopOf="@+id/linearLayout"
-                        app:layout_constraintVertical_bias="0.0"
-                        app:srcCompat="@android:drawable/ic_menu_add" />
+                        android:minHeight="200dp">
 
-                    <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="57dp"
-                        android:layout_height="53dp"
-                        android:background="@color/lightPink"
-                        android:scaleType="centerInside"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.667"
-                        app:layout_constraintStart_toStartOf="@+id/thumbnail"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.976"
-                        app:srcCompat="@android:drawable/ic_menu_share" />
+                        <!-- FIX 5: LinearLayout width changed from 200dp to 0dp to fill remaining space properly -->
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/thumbnail"
+                            android:layout_width="127dp"
+                            android:layout_height="179dp"
+                            android:layout_marginStart="16dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearanceOverlay="@style/RoundedCorners"
+                            app:srcCompat="@drawable/ic_launcher_background" />
 
-                    <View
-                        android:id="@+id/view2"
-                        android:layout_width="248dp"
-                        android:layout_height="2dp"
-                        android:layout_marginStart="156dp"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginBottom="6dp"
-                        android:background="#000000"
-                        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+                        <LinearLayout
+                            android:id="@+id/linearLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/thumbnail"
+                            app:layout_constraintTop_toTopOf="@+id/thumbnail">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                            <TextView
+                                android:id="@+id/fileHeader"
+                                android:layout_width="match_parent"
+                                android:layout_height="46dp"
+                                android:fontFamily="serif"
+                                android:gravity="center_vertical"
+                                android:text="&quot;Title&quot;"
+                                android:textColor="@color/black"
+                                android:textSize="30sp"
+                                android:textStyle="bold"
+                                tools:ignore="Deprecated,TextViewEdits" />
 
-            </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:id="@+id/DateModified"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="date"
+                                android:textSize="15sp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="12dp" />
+                            <TextView
+                                android:id="@+id/Size"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="File size" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="#C7BDBD"
+                            app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/thumbnail" />
+
+                        <ImageButton
+                            android:id="@+id/imageButton"
+                            android:layout_width="57dp"
+                            android:layout_height="53dp"
+                            android:background="@color/lightPink"
+                            android:scaleType="centerInside"
+                            app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
+                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
+                            app:layout_constraintStart_toEndOf="@+id/thumbnail"
+                            app:srcCompat="@android:drawable/ic_menu_share" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/floatingActionButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="12dp"
+                            android:clickable="true"
+                            app:backgroundTint="@color/lightPink"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:srcCompat="@android:drawable/ic_menu_add" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
