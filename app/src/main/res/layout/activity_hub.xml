@@ -10,6 +10,25 @@
 
     <!-- FIX 1: Removed android:backgroundTint="#242222" from root layout -->
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="@color/lightPink"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightPink"
+        android:backgroundTint="@color/lightPink"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -20,18 +39,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:queryHint="Search"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintStart_toEndOf="@+id/logo"
-        app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.5" />
 
     <!-- FIX 2: SearchView vertical_bias changed from 0.1 to 0.5 to center in toolbar -->
 
@@ -49,14 +56,13 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="90dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,7 +104,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:shapeAppearanceOverlay="@style/RoundedCorners"
-                            app:srcCompat="@drawable/ic_launcher_background" />
+                            app:srcCompat="@drawable/test" />
 
                         <LinearLayout
                             android:id="@+id/linearLayout"
@@ -146,32 +152,34 @@
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="4dp"
                             android:background="#C7BDBD"
-                            app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/thumbnail" />
 
-                        <ImageButton
-                            android:id="@+id/imageButton"
-                            android:layout_width="57dp"
-                            android:layout_height="53dp"
-                            android:background="@color/lightPink"
-                            android:scaleType="centerInside"
+                        <LinearLayout
+                            android:layout_height="66dp"
+                            android:orientation="horizontal"
                             app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
-                            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
+                            app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toEndOf="@+id/thumbnail"
-                            app:srcCompat="@android:drawable/ic_menu_share" />
+                            app:layout_constraintTop_toTopOf="@id/linearLayout"
+                            app:layout_constraintVertical_bias="0.946">
 
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/floatingActionButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="12dp"
-                            android:clickable="true"
-                            app:backgroundTint="@color/lightPink"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:srcCompat="@android:drawable/ic_menu_add" />
+
+                            <ImageButton
+                                android:id="@+id/imageButton"
+                                android:layout_width="57dp"
+                                android:layout_height="53dp"
+                                android:background="@color/lightPink"
+                                android:scaleType="centerInside"
+                                app:srcCompat="@android:drawable/ic_menu_share" />
+
+                            <Space
+                                android:layout_width=""
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                        </LinearLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -181,5 +189,19 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_height="40dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/black"
+        android:queryHint="Search"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/logo"
+        app:layout_constraintTop_toTopOf="@+id/materialToolbar"
+        app:layout_constraintVertical_bias="1.0"  android:layout_width="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
