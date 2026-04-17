@@ -31,8 +31,8 @@ public class ViewTextFile extends AppCompatActivity {
         TextView fileContent = findViewById(R.id.fileContentText);
 
         //File Variables
-        //String filepath = getIntent().getStringExtra("FILE_PATH");
-        String filepath = "app/sampledata/textdata.txt";
+        String filepath = getIntent().getStringExtra("FILE_PATH");
+        //String filepath = "app/sampledata/textdata.txt";
         assert filepath != null;
         File file = new File(filepath);
 
