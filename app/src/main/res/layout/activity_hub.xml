@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:contentDescription="@string/app_name"
         app:backgroundTint="@color/lightPink"
         app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +28,8 @@
         android:background="@color/lightPink"
         android:backgroundTint="@color/lightPink"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -50,7 +52,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logobg" />
+        app:srcCompat="@drawable/logobg"
+        tools:ignore="ContentDescription" />
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -59,7 +62,7 @@
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.0">
@@ -104,7 +107,8 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:shapeAppearanceOverlay="@style/RoundedCorners"
-                            app:srcCompat="@drawable/test" />
+                            app:srcCompat="@drawable/test"
+                            tools:ignore="SpeakableTextPresentCheck" />
 
                         <LinearLayout
                             android:id="@+id/linearLayout"
@@ -142,21 +146,20 @@
                                 android:layout_height="wrap_content"
                                 android:text="File size" />
 
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <ImageView
+                                android:id="@+id/imageView5"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/black"
+                                android:src="@android:drawable/divider_horizontal_dark" />
+
                         </LinearLayout>
 
-                        <View
-                            android:id="@+id/view2"
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="12dp"
-                            android:layout_marginBottom="4dp"
-                            android:background="#C7BDBD"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/thumbnail" />
-
                         <LinearLayout
-                            android:layout_width="0dp"
                             android:layout_height="66dp"
                             android:orientation="horizontal"
                             app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
@@ -166,18 +169,34 @@
                             app:layout_constraintTop_toTopOf="@id/linearLayout"
                             app:layout_constraintVertical_bias="0.946">
 
+
                             <ImageButton
                                 android:id="@+id/imageButton"
-                                android:layout_width="57dp"
-                                android:layout_height="53dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 android:background="@color/lightPink"
                                 android:scaleType="centerInside"
-                                app:srcCompat="@android:drawable/ic_menu_share" />
+                                app:srcCompat="@android:drawable/ic_menu_share"
+                                tools:ignore="SpeakableTextPresentCheck" />
 
-                            <Space
-                                android:layout_width="0dp"
+                            <ImageButton
+                                android:id="@+id/imageButton5"
+                                android:layout_width="10dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1" />
+                                android:layout_weight="1"
+                                android:background="@color/lightPink"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/trashbutton" />
+
+                            <ImageButton
+                                android:id="@+id/imageButton6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@color/lightPink"
+                                android:scaleType="fitStart"
+                                android:src="@android:drawable/btn_star_big_off" />
 
                         </LinearLayout>
 
@@ -192,6 +211,7 @@
 
     <SearchView
         android:id="@+id/searchView"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/black"
@@ -202,6 +222,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/logo"
         app:layout_constraintTop_toTopOf="@+id/materialToolbar"
-        app:layout_constraintVertical_bias="1.0"  android:layout_width="wrap_content"/>
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
