@@ -26,6 +26,8 @@
         <activity android:name=".CustomizationMenu" />
 
         <activity android:name=".CustomizeNavActivity" />
+
+        <activity android:name=".ViewTextFile" />
     </application>
 
 </manifest>
