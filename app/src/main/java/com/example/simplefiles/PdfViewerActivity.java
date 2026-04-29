@@ -67,7 +67,7 @@ public class PdfViewerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pdf_viewer);
+        setContentView(R.layout.activity_pdf_viewerbetter);
 
         filePath = getIntent().getStringExtra("file_path");
         if (filePath == null) { finish(); return; }
@@ -112,7 +112,7 @@ public class PdfViewerActivity extends AppCompatActivity {
         // Scale page to view width
         int viewWidth  = ivPage.getWidth() > 0 ? ivPage.getWidth() : 1080;
         int viewHeight = (int) (viewWidth * currentPage.getHeight()
-                / (float) currentPage.getWidth());
+                                          / (float) currentPage.getWidth());
 
         Bitmap bitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888);
         currentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);

@@ -163,7 +163,7 @@ public class AnnotationOverlayView extends View {
             case MotionEvent.ACTION_MOVE:
                 if (currentRect != null) {
                     currentRect.set(Math.min(startX, x), Math.min(startY, y),
-                            Math.max(startX, x), Math.max(startY, y));
+                                    Math.max(startX, x), Math.max(startY, y));
                     invalidate();
                 }
                 break;

@@ -94,7 +94,7 @@ public class PdfAnnotationWriter {
     }
 
     private static void embedInk(PdfDocument doc, int page,
-                                 AnnotationData ann, DeviceRgb rgb) {
+                                  AnnotationData ann, DeviceRgb rgb) {
         if (ann.inkPoints == null || ann.inkPoints.size() < 4) return;
 
         // iText ink annotation takes a list of point lists (each = one stroke)
@@ -124,7 +124,7 @@ public class PdfAnnotationWriter {
     }
 
     private static void embedTextNote(PdfDocument doc, int page,
-                                      AnnotationData ann, DeviceRgb rgb) {
+                                       AnnotationData ann, DeviceRgb rgb) {
         Rectangle rect = toITextRect(ann.rect);
 
         PdfFreeTextAnnotation note = new PdfFreeTextAnnotation(rect,
