@@ -51,8 +51,8 @@ public class FileRepository {
         // Exclude hidden files and Android system folders
         String selection =
                 MediaStore.Files.FileColumns.DISPLAY_NAME + " NOT LIKE '.%'" +
-                " AND " + MediaStore.Files.FileColumns.DATA + " NOT LIKE '%/Android/data/%'" +
-                " AND " + MediaStore.Files.FileColumns.DATA + " NOT LIKE '%/Android/obb/%'";
+                        " AND " + MediaStore.Files.FileColumns.DATA + " NOT LIKE '%/Android/data/%'" +
+                        " AND " + MediaStore.Files.FileColumns.DATA + " NOT LIKE '%/Android/obb/%'";
 
         try (Cursor cursor = context.getContentResolver().query(
                 collection, projection, selection, null,

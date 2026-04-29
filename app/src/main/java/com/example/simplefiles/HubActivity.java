@@ -3,14 +3,10 @@ package com.example.simplefiles;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -50,16 +46,11 @@ public class HubActivity extends AppCompatActivity {
         });
 
 
-        load.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(HubActivity.this, ViewTextFile.class);
-                File file = new File(getFilesDir(), "testdata.txt");
-                intent.putExtra("FILE_PATH", file.getAbsolutePath());
-                startActivity(intent);
-            }
+        load.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FileBrowserActivity.class);
+            startActivity(intent);
         });
+
     }
 
 

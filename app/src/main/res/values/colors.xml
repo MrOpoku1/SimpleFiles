@@ -4,4 +4,29 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lightPink">#F7CFD4</color>
     <color name="fileTextColor">#FF000000</color>
+    <!-- Brand colors -->
+    <color name="color_primary">#1565C0</color>
+    <color name="color_primary_dark">#0D47A1</color>
+    <color name="color_accent">#42A5F5</color>
+
+    <!-- Backgrounds -->
+    <color name="bg_primary">#FAFAFA</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="bg_search">#EFEFEF</color>
+
+    <!-- Text -->
+    <color name="text_primary">#1A1A1A</color>
+    <color name="text_secondary">#555555</color>
+    <color name="text_hint">#9E9E9E</color>
+    <color name="text_on_primary">#FFFFFF</color>
+
+    <!-- File type icon tints (optional, for future use) -->
+    <color name="icon_pdf">#E53935</color>
+    <color name="icon_image">#43A047</color>
+    <color name="icon_text">#FB8C00</color>
+    <color name="icon_folder">#FFB300</color>
+    <color name="icon_other">#757575</color>
+
+    <!-- Divider -->
+    <color name="divider">#E0E0E0</color>
 </resources>

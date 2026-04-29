@@ -1,72 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    activity_file_browser.xml
-    Place in: app/src/main/res/layout/activity_file_browser.xml
+    app/src/main/res/layout/activity_file_browser.xml
+    Replace your existing activity_file_browser.xml with this.
 -->
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bg_primary">
+    android:background="#242222"
+    tools:context=".FileBrowserActivity">
 
-    <!-- Toolbar -->
+    <!-- ── Toolbar ─────────────────────────────────────────────────────── -->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/color_primary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <!-- Search bar -->
-    <EditText
-        android:id="@+id/et_search"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:background="@drawable/bg_search_bar"
-        android:drawableStart="@drawable/ic_search"
-        android:drawablePadding="8dp"
-        android:hint="Search files…"
-        android:inputType="text"
-        android:imeOptions="actionSearch"
-        android:maxLines="1"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="15sp"
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_hint" />
+        android:background="#B49191"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Loading indicator -->
+    <!-- Logo pinned to left of toolbar -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="55dp"
+        android:layout_height="53dp"
+        android:contentDescription="SimpleFiles logo"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logobg"
+        tools:ignore="ContentDescription" />
+
+    <!-- Search bar inside toolbar, to the right of the logo -->
+    <SearchView
+        android:id="@+id/et_search"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/black"
+        android:queryHint="Search files…"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/logo"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <!-- ── Loading indicator ───────────────────────────────────────────── -->
+
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:layout_marginTop="16dp"
         android:visibility="gone" />
 
-    <!-- Empty state message -->
+    <!-- ── Empty state ─────────────────────────────────────────────────── -->
+
     <TextView
         android:id="@+id/tv_empty"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-        android:gravity="center"
         android:text="No files found"
-        android:textColor="@color/text_hint"
+        android:textColor="#9E9E9E"
         android:textSize="16sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <!-- File list -->
+    <!-- ── File list ───────────────────────────────────────────────────── -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_files"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:clipToPadding="false"
-        android:paddingBottom="16dp" />
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,13 +4,11 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,32 +23,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * File Browser Activity
- *
- * Layout IDs expected (define in activity_file_browser.xml):
- *   R.id.toolbar            – AppCompat Toolbar (shows sort menu icon)
- *   R.id.et_search          – EditText for live search
- *   R.id.rv_files           – RecyclerView showing file list
- *   R.id.progress_bar       – ProgressBar (shown while loading)
- *   R.id.tv_empty           – TextView shown when list is empty
- *
- * Permissions:
- *   API 29–32 → READ_EXTERNAL_STORAGE
- *   API 33+   → READ_MEDIA_IMAGES + READ_MEDIA_VIDEO + READ_MEDIA_AUDIO (or READ_MEDIA_VISUAL_USER_SELECTED)
- *   (declared in AndroidManifest.xml — see notes at bottom of this file)
- */
 public class FileBrowserActivity extends AppCompatActivity
         implements FileAdapter.OnFileClickListener {
 
-    // ── Views & adapter ────────────────────────────────────────────────────────
-
     private FileBrowserViewModel viewModel;
     private FileAdapter          adapter;
-
-    private ProgressBar progressBar;
-    private TextView    tvEmpty;
-    private EditText    etSearch;
+    private ProgressBar          progressBar;
+    private TextView             tvEmpty;
 
     // ── Permission launcher ────────────────────────────────────────────────────
 
@@ -59,11 +38,8 @@ public class FileBrowserActivity extends AppCompatActivity
                     new ActivityResultContracts.RequestMultiplePermissions(),
                     result -> {
                         boolean granted = result.values().stream().anyMatch(v -> v);
-                        if (granted) {
-                            viewModel.loadFiles();
-                        } else {
-                            showPermissionDeniedMessage();
-                        }
+                        if (granted) viewModel.loadFiles();
+                        else showPermissionDeniedMessage();
                     });
 
     // ── Lifecycle ──────────────────────────────────────────────────────────────
@@ -88,42 +64,45 @@ public class FileBrowserActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_sort) {
+        if (item.getItemId() == R.id.action_sort) {
             showSortDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    // ── Setup helpers ──────────────────────────────────────────────────────────
+    // ── Setup ──────────────────────────────────────────────────────────────────
 
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("SimpleFiles");
-        }
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle("");  // logo takes the left side
     }
 
     private void setupRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.rv_files);
-        progressBar = findViewById(R.id.progress_bar);
-        tvEmpty     = findViewById(R.id.tv_empty);
+        RecyclerView rv = findViewById(R.id.rv_files);
+        progressBar     = findViewById(R.id.progress_bar);
+        tvEmpty         = findViewById(R.id.tv_empty);
 
         adapter = new FileAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(adapter);
     }
 
     private void setupSearch() {
-        etSearch = findViewById(R.id.et_search);
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override public void afterTextChanged(Editable s) {
-                viewModel.onSearchQueryChanged(s.toString());
+        SearchView searchView = findViewById(R.id.et_search);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                viewModel.onSearchQueryChanged(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                viewModel.onSearchQueryChanged(newText);
+                return true;
             }
         });
     }
@@ -131,21 +110,17 @@ public class FileBrowserActivity extends AppCompatActivity
     private void setupViewModel() {
         viewModel = new ViewModelProvider(this).get(FileBrowserViewModel.class);
 
-        // Observe file list
         viewModel.getDisplayedFiles().observe(this, files -> {
             adapter.submitList(files);
             tvEmpty.setVisibility(files.isEmpty() ? View.VISIBLE : View.GONE);
         });
 
-        // Observe loading state
         viewModel.getIsLoading().observe(this, loading ->
                 progressBar.setVisibility(loading ? View.VISIBLE : View.GONE));
 
-        // Observe errors
         viewModel.getErrorMessage().observe(this, msg -> {
-            if (msg != null && !msg.isEmpty()) {
+            if (msg != null && !msg.isEmpty())
                 Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-            }
         });
     }
 
@@ -154,37 +129,31 @@ public class FileBrowserActivity extends AppCompatActivity
     private void checkPermissionsAndLoad() {
         String[] permissions = getRequiredPermissions();
         boolean allGranted = true;
-        for (String perm : permissions) {
-            if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+        for (String p : permissions) {
+            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
                 allGranted = false;
                 break;
             }
         }
-
-        if (allGranted) {
-            viewModel.loadFiles();
-        } else {
-            permissionLauncher.launch(permissions);
-        }
+        if (allGranted) viewModel.loadFiles();
+        else permissionLauncher.launch(permissions);
     }
 
     private String[] getRequiredPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 33
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return new String[]{
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO,
                     Manifest.permission.READ_MEDIA_AUDIO
             };
-        } else {
-            return new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE };
         }
+        return new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE };
     }
 
     private void showPermissionDeniedMessage() {
         new AlertDialog.Builder(this)
                 .setTitle("Permission Required")
-                .setMessage("SimpleFiles needs storage access to browse your files. " +
-                        "Please grant access in Settings.")
+                .setMessage("SimpleFiles needs storage access to browse your files.")
                 .setPositiveButton("OK", null)
                 .show();
     }
@@ -192,16 +161,14 @@ public class FileBrowserActivity extends AppCompatActivity
     // ── Sort dialog ────────────────────────────────────────────────────────────
 
     private void showSortDialog() {
-        FileSortOption[] options   = FileSortOption.values();
-        String[]         labels    = new String[options.length];
-        int              current   = 0;
-        FileSortOption   activSort = viewModel.getCurrentSortOption();
-
+        FileSortOption[] options = FileSortOption.values();
+        String[]         labels  = new String[options.length];
+        int current = 0;
+        FileSortOption active = viewModel.getCurrentSortOption();
         for (int i = 0; i < options.length; i++) {
             labels[i] = options[i].getLabel();
-            if (options[i] == activSort) current = i;
+            if (options[i] == active) current = i;
         }
-
         new AlertDialog.Builder(this)
                 .setTitle("Sort by")
                 .setSingleChoiceItems(labels, current, (dialog, which) -> {
@@ -216,33 +183,33 @@ public class FileBrowserActivity extends AppCompatActivity
 
     @Override
     public void onFileClick(FileItem item) {
-        // TODO: open file viewer / PDF annotator
+        // TODO: open PDF viewer / image viewer
         Toast.makeText(this, "Opened: " + item.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFileLongClick(FileItem item) {
-        // TODO: show context menu (share, delete, rename, annotate)
-        Toast.makeText(this, item.getName() + "\n" + item.getPath(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, item.getPath(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onShareClick(FileItem item) {
+        Toast.makeText(this, "Share: " + item.getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDeleteClick(FileItem item) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete")
+                .setMessage("Delete \"" + item.getName() + "\"?")
+                .setPositiveButton("Delete", (d, w) ->
+                        Toast.makeText(this, "Delete coming soon", Toast.LENGTH_SHORT).show())
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    @Override
+    public void onStarClick(FileItem item) {
+        Toast.makeText(this, "Starred: " + item.getName(), Toast.LENGTH_SHORT).show();
     }
 }
-
-/*
- * ════════════════════════════════════════════════════════════
- * AndroidManifest.xml — add these inside <manifest> block:
- * ════════════════════════════════════════════════════════════
- *
- * <!-- API 29–32 -->
- * <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
- *     android:maxSdkVersion="32" />
- *
- * <!-- API 33+ -->
- * <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
- * <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
- * <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
- *
- * Then declare the activity:
- * <activity android:name=".FileBrowserActivity"
- *     android:windowSoftInputMode="adjustResize" />
- * ════════════════════════════════════════════════════════════
- */

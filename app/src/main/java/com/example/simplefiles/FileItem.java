@@ -69,11 +69,11 @@ public class FileItem {
         if (lower.endsWith(".pdf"))
             return Type.PDF;
         if (lower.endsWith(".jpg") || lower.endsWith(".jpeg") ||
-            lower.endsWith(".png") || lower.endsWith(".gif")  ||
-            lower.endsWith(".webp") || lower.endsWith(".bmp"))
+                lower.endsWith(".png") || lower.endsWith(".gif")  ||
+                lower.endsWith(".webp") || lower.endsWith(".bmp"))
             return Type.IMAGE;
         if (lower.endsWith(".txt") || lower.endsWith(".md") ||
-            lower.endsWith(".csv") || lower.endsWith(".log"))
+                lower.endsWith(".csv") || lower.endsWith(".log"))
             return Type.TEXT;
         return Type.OTHER;
     }
