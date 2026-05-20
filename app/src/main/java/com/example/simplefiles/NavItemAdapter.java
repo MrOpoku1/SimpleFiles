@@ -65,6 +65,12 @@ public class NavItemAdapter extends RecyclerView.Adapter<NavItemAdapter.NavViewH
         return items;
     }
 
+    public void setItems(List<NavItem> newItems) {
+        items.clear();
+        items.addAll(newItems);
+        notifyDataSetChanged();
+    }
+
     // --- ViewHolder ---
     static class NavViewHolder extends RecyclerView.ViewHolder {
         TextView label;

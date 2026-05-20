@@ -1,6 +1,8 @@
 package com.example.simplefiles;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,20 +13,28 @@ import java.util.List;
 
 public class CustomizeNavActivity extends AppCompatActivity {
 
+    private static final String PREFS_NAME  = "nav_prefs";
+    private static final String KEY_COUNT   = "nav_count";
+
     private NavItemAdapter adapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.customization_menu);
-
-        // Build your item list
+    /** Default nav items — used on first run and for Reset. */
+    private static List<NavItem> buildDefaults() {
         List<NavItem> items = new ArrayList<>();
         items.add(new NavItem("font_up",   "A+ (Font Up)",   true));
         items.add(new NavItem("font_down", "A- (Font Down)", true));
         items.add(new NavItem("home",      "Home",           true));
         items.add(new NavItem("bookmarks", "Bookmarks",      true));
         items.add(new NavItem("settings",  "Settings",       false));
+        return items;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.customization_menu);
+
+        List<NavItem> items = loadFromPrefs();
 
         // Set up adapter with settings listener instead of rename listener
         adapter = new NavItemAdapter(items, this::showItemSettings);
@@ -58,12 +68,15 @@ public class CustomizeNavActivity extends AppCompatActivity {
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         findViewById(R.id.btnReset).setOnClickListener(v -> {
-            // TODO: restore original visibility
+            List<NavItem> defaults = buildDefaults();
+            adapter.setItems(defaults);
+            Toast.makeText(this, "Reset to defaults", Toast.LENGTH_SHORT).show();
         });
 
         findViewById(R.id.btnSave).setOnClickListener(v -> {
-            List<NavItem> saved = adapter.getItems();
-            // TODO: persist to SharedPreferences
+            saveToPrefs(adapter.getItems());
+            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+            finish();
         });
     }
 
@@ -72,5 +85,40 @@ public class CustomizeNavActivity extends AppCompatActivity {
         NavItemSettingsDialog.newInstance(item, position, changedPosition -> {
             adapter.notifyItemChanged(changedPosition);
         }).show(getSupportFragmentManager(), "item_settings");
+    }
+
+    private void saveToPrefs(List<NavItem> items) {
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putInt(KEY_COUNT, items.size());
+        for (int i = 0; i < items.size(); i++) {
+            NavItem item = items.get(i);
+            editor.putString("nav_id_"      + i, item.getId());
+            editor.putString("nav_label_"   + i, item.getLabel());
+            editor.putBoolean("nav_visible_" + i, item.isVisible());
+            editor.putInt("nav_textsize_"   + i, item.getTextSize());
+            editor.putBoolean("nav_icon_"   + i, item.isShowIcon());
+        }
+        editor.apply();
+    }
+
+    private List<NavItem> loadFromPrefs() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int count = prefs.getInt(KEY_COUNT, -1);
+        if (count <= 0) return buildDefaults();
+
+        List<NavItem> items = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            String  id      = prefs.getString("nav_id_"      + i, "item_" + i);
+            String  label   = prefs.getString("nav_label_"   + i, "Item " + i);
+            boolean visible = prefs.getBoolean("nav_visible_" + i, true);
+            int     size    = prefs.getInt("nav_textsize_"   + i, 13);
+            boolean icon    = prefs.getBoolean("nav_icon_"   + i, true);
+
+            NavItem item = new NavItem(id, label, visible);
+            item.setTextSize(size);
+            item.setShowIcon(icon);
+            items.add(item);
+        }
+        return items;
     }
 }
