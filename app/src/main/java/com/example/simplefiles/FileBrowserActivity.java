@@ -75,6 +75,10 @@ public class FileBrowserActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            viewModel.navigateUp();
+            return true;
+        }
         if (item.getItemId() == R.id.action_sort) {
             showSortDialog();
             return true;
@@ -82,13 +86,24 @@ public class FileBrowserActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (viewModel.isInSubDirectory()) {
+            viewModel.navigateUp();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     // ── Setup ──────────────────────────────────────────────────────────────────
 
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setTitle("");  // logo takes the left side
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("All Files");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
     }
 
     private void setupRecyclerView() {
@@ -132,6 +147,17 @@ public class FileBrowserActivity extends AppCompatActivity
         viewModel.getErrorMessage().observe(this, msg -> {
             if (msg != null && !msg.isEmpty())
                 Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        });
+
+        viewModel.getCurrentPath().observe(this, path -> {
+            if (getSupportActionBar() == null) return;
+            if (path == null) {
+                getSupportActionBar().setTitle("All Files");
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            } else {
+                getSupportActionBar().setTitle(new java.io.File(path).getName());
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         });
     }
 
@@ -194,6 +220,14 @@ public class FileBrowserActivity extends AppCompatActivity
 
     @Override
     public void onFileClick(FileItem item) {
+        if (item.isDirectory()) {
+            if (item.getPath() == null) {
+                viewModel.navigateUp();
+            } else {
+                viewModel.navigateInto(item);
+            }
+            return;
+        }
         Intent intent = new Intent(this, ViewTextFile.class);
         intent.putExtra("FILE_PATH", item.getPath());
         startActivity(intent);

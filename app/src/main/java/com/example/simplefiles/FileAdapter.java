@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,11 +16,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * RecyclerView adapter — pink card design.
- * Images get a real thumbnail; all other types show an emoji icon.
- */
-public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder> {
+public class FileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // ── Listener ───────────────────────────────────────────────────────────────
 
@@ -32,6 +27,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
         void onDeleteClick(FileItem item);
         void onStarClick(FileItem item);
     }
+
+    private static final int VIEW_TYPE_FILE   = 0;
+    private static final int VIEW_TYPE_FOLDER = 1;
 
     // ── State ──────────────────────────────────────────────────────────────────
 
@@ -51,7 +49,11 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
 
             @Override
             public boolean areItemsTheSame(int o, int n) {
-                return items.get(o).getPath().equals(newItems.get(n).getPath());
+                String oldPath = items.get(o).getPath();
+                String newPath = newItems.get(n).getPath();
+                if (oldPath == null && newPath == null) return true;
+                if (oldPath == null || newPath == null) return false;
+                return oldPath.equals(newPath);
             }
 
             @Override
@@ -68,23 +70,72 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
 
     // ── Adapter ────────────────────────────────────────────────────────────────
 
+    @Override
+    public int getItemViewType(int position) {
+        return items.get(position).isDirectory() ? VIEW_TYPE_FOLDER : VIEW_TYPE_FILE;
+    }
+
     @NonNull
     @Override
-    public FileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_file, parent, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        if (viewType == VIEW_TYPE_FOLDER) {
+            View v = inflater.inflate(R.layout.item_folder, parent, false);
+            return new FolderViewHolder(v);
+        }
+        View v = inflater.inflate(R.layout.item_file, parent, false);
         return new FileViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FileViewHolder h, int position) {
-        h.bind(items.get(position));
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        FileItem item = items.get(position);
+        if (holder instanceof FolderViewHolder) {
+            ((FolderViewHolder) holder).bind(item);
+        } else {
+            ((FileViewHolder) holder).bind(item);
+        }
     }
 
     @Override
     public int getItemCount() { return items.size(); }
 
-    // ── ViewHolder ─────────────────────────────────────────────────────────────
+    // ── FolderViewHolder ───────────────────────────────────────────────────────
+
+    class FolderViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView tvIcon;
+        private final TextView tvName;
+        private final TextView tvSubtitle;
+
+        FolderViewHolder(@NonNull View v) {
+            super(v);
+            tvIcon     = v.findViewById(R.id.tv_folder_icon);
+            tvName     = v.findViewById(R.id.tv_folder_name);
+            tvSubtitle = v.findViewById(R.id.tv_folder_subtitle);
+        }
+
+        void bind(FileItem item) {
+            if (item.getPath() == null) {
+                // Nav-up sentinel
+                tvIcon.setText("↩");
+                tvName.setText("Back");
+                tvSubtitle.setText("Go up one folder");
+            } else {
+                tvIcon.setText("📁");
+                tvName.setText(item.getName());
+                tvSubtitle.setText(item.getFormattedSize());
+            }
+
+            itemView.setOnClickListener(v -> { if (listener != null) listener.onFileClick(item); });
+            itemView.setOnLongClickListener(v -> {
+                if (listener != null) listener.onFileLongClick(item);
+                return true;
+            });
+        }
+    }
+
+    // ── FileViewHolder ─────────────────────────────────────────────────────────
 
     class FileViewHolder extends RecyclerView.ViewHolder {
 
@@ -112,9 +163,8 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
         void bind(FileItem item) {
             tvName.setText(item.getName());
             tvDate.setText(item.getFormattedDate());
-            tvSize.setText(item.isDirectory() ? "Folder" : item.getFormattedSize());
+            tvSize.setText(item.getFormattedSize());
 
-            // Images → real thumbnail; everything else → emoji icon
             if (item.getType() == FileItem.Type.IMAGE && item.getPath() != null) {
                 android.graphics.Bitmap bmp = BitmapFactory.decodeFile(item.getPath());
                 if (bmp != null) {
@@ -128,14 +178,12 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder
                 showIcon(item);
             }
 
-            // Card click
             itemView.setOnClickListener(v -> { if (listener != null) listener.onFileClick(item); });
             itemView.setOnLongClickListener(v -> {
                 if (listener != null) listener.onFileLongClick(item);
                 return true;
             });
 
-            // Action buttons
             btnShare.setOnClickListener(v  -> { if (listener != null) listener.onShareClick(item); });
             btnDelete.setOnClickListener(v -> { if (listener != null) listener.onDeleteClick(item); });
             btnStar.setOnClickListener(v   -> { if (listener != null) listener.onStarClick(item); });

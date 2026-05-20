@@ -18,14 +18,22 @@ public class CustomizeNavActivity extends AppCompatActivity {
 
     private NavItemAdapter adapter;
 
-    /** Default nav items — used on first run and for Reset. */
+    /**
+     * Default tool set — IDs must match the switch in ViewTextFile.executeNavAction().
+     * Enabled items appear in the viewer drawer; disabled ones are hidden but kept here
+     * so the user can turn them on in the customise screen.
+     */
     private static List<NavItem> buildDefaults() {
         List<NavItem> items = new ArrayList<>();
-        items.add(new NavItem("font_up",   "A+ (Font Up)",   true));
-        items.add(new NavItem("font_down", "A- (Font Down)", true));
-        items.add(new NavItem("home",      "Home",           true));
-        items.add(new NavItem("bookmarks", "Bookmarks",      true));
-        items.add(new NavItem("settings",  "Settings",       false));
+        items.add(new NavItem("font_up",       "Font +",        true));
+        items.add(new NavItem("font_down",     "Font -",        true));
+        items.add(new NavItem("scroll_top",    "Scroll to Top", true));
+        items.add(new NavItem("scroll_bottom", "Scroll to End", true));
+        items.add(new NavItem("page_up",       "Page Up",       true));
+        items.add(new NavItem("page_down",     "Page Down",     true));
+        items.add(new NavItem("share",         "Share File",    true));
+        items.add(new NavItem("go_back",       "Close Viewer",  false));
+        items.add(new NavItem("close_menu",    "Close Menu",    false));
         return items;
     }
 

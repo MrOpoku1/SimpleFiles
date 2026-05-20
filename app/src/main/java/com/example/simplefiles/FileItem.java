@@ -36,11 +36,14 @@ public class FileItem {
 
     // ── Helpers ────────────────────────────────────────────────────────────────
 
-    /** Human-readable file size (e.g. "2.4 MB"). Returns "" for folders. */
+    /** Human-readable file size (e.g. "2.4 MB"). For folders, returns item count. */
     public String getFormattedSize() {
-        if (isDirectory) return "";
-        if (sizeBytes < 1024)              return sizeBytes + " B";
-        if (sizeBytes < 1024 * 1024)       return String.format("%.1f KB", sizeBytes / 1024.0);
+        if (isDirectory) {
+            if (sizeBytes <= 0) return "Folder";
+            return sizeBytes + (sizeBytes == 1 ? " item" : " items");
+        }
+        if (sizeBytes < 1024)               return sizeBytes + " B";
+        if (sizeBytes < 1024 * 1024)        return String.format("%.1f KB", sizeBytes / 1024.0);
         if (sizeBytes < 1024 * 1024 * 1024) return String.format("%.1f MB", sizeBytes / (1024.0 * 1024));
         return String.format("%.1f GB", sizeBytes / (1024.0 * 1024 * 1024));
     }
