@@ -1,9 +1,13 @@
 package com.example.simplefiles;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +23,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FileBrowserActivity extends AppCompatActivity
         implements FileAdapter.OnFileClickListener {
@@ -30,6 +39,7 @@ public class FileBrowserActivity extends AppCompatActivity
     private FileAdapter          adapter;
     private ProgressBar          progressBar;
     private TextView             tvEmpty;
+    private SharedPreferences    prefs;
 
     // ── Permission launcher ────────────────────────────────────────────────────
 
@@ -49,6 +59,7 @@ public class FileBrowserActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_browser);
 
+        prefs = getSharedPreferences("simplefiles_prefs", MODE_PRIVATE);
         setupToolbar();
         setupRecyclerView();
         setupSearch();
@@ -183,8 +194,9 @@ public class FileBrowserActivity extends AppCompatActivity
 
     @Override
     public void onFileClick(FileItem item) {
-        // TODO: open PDF viewer / image viewer
-        Toast.makeText(this, "Opened: " + item.getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, ViewTextFile.class);
+        intent.putExtra("FILE_PATH", item.getPath());
+        startActivity(intent);
     }
 
     @Override
@@ -194,7 +206,19 @@ public class FileBrowserActivity extends AppCompatActivity
 
     @Override
     public void onShareClick(FileItem item) {
-        Toast.makeText(this, "Share: " + item.getName(), Toast.LENGTH_SHORT).show();
+        if (item.getPath() == null) return;
+        try {
+            File file = new File(item.getPath());
+            Uri uri = FileProvider.getUriForFile(this,
+                    getApplicationContext().getPackageName() + ".fileprovider", file);
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType(getMimeType(item));
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(shareIntent, "Share " + item.getName()));
+        } catch (Exception e) {
+            Toast.makeText(this, "Cannot share this file", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -202,14 +226,66 @@ public class FileBrowserActivity extends AppCompatActivity
         new AlertDialog.Builder(this)
                 .setTitle("Delete")
                 .setMessage("Delete \"" + item.getName() + "\"?")
-                .setPositiveButton("Delete", (d, w) ->
-                        Toast.makeText(this, "Delete coming soon", Toast.LENGTH_SHORT).show())
+                .setPositiveButton("Delete", (d, w) -> performDelete(item))
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
     @Override
     public void onStarClick(FileItem item) {
-        Toast.makeText(this, "Starred: " + item.getName(), Toast.LENGTH_SHORT).show();
+        String path = item.getPath();
+        if (path == null) return;
+        Set<String> starred = new HashSet<>(
+                prefs.getStringSet("starred_files", new HashSet<>()));
+        if (starred.contains(path)) {
+            starred.remove(path);
+            Toast.makeText(this, "Removed from favourites", Toast.LENGTH_SHORT).show();
+        } else {
+            starred.add(path);
+            Toast.makeText(this, "Added to favourites", Toast.LENGTH_SHORT).show();
+        }
+        prefs.edit().putStringSet("starred_files", starred).apply();
+    }
+
+    private void performDelete(FileItem item) {
+        if (item.getPath() == null) return;
+        boolean deleted = false;
+        try {
+            File file = new File(item.getPath());
+            deleted = file.delete();
+        } catch (Exception ignored) {}
+
+        if (!deleted) {
+            // Fallback: try via ContentResolver (works for app-owned files on API 30+)
+            try {
+                int rows = getContentResolver().delete(
+                        MediaStore.Files.getContentUri("external"),
+                        MediaStore.Files.FileColumns.DATA + " = ?",
+                        new String[]{ item.getPath() });
+                deleted = rows > 0;
+            } catch (Exception ignored) {}
+        } else {
+            // Sync MediaStore so the file disappears from other apps
+            getContentResolver().delete(
+                    MediaStore.Files.getContentUri("external"),
+                    MediaStore.Files.FileColumns.DATA + " = ?",
+                    new String[]{ item.getPath() });
+        }
+
+        if (deleted) {
+            viewModel.loadFiles();
+            Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Could not delete — permission denied", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private String getMimeType(FileItem item) {
+        switch (item.getType()) {
+            case PDF:   return "application/pdf";
+            case IMAGE: return "image/*";
+            case TEXT:  return "text/plain";
+            default:    return "*/*";
+        }
     }
 }
