@@ -15,7 +15,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
@@ -35,7 +34,6 @@ public class ViewTextFile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.file_view_text);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -50,10 +48,8 @@ public class ViewTextFile extends AppCompatActivity {
         Button btnShare = findViewById(R.id.button);
         Button btnMenu  = findViewById(R.id.button2);
 
-        btnBack.setText("Back");
         btnBack.setOnClickListener(v -> finish());
 
-        btnMenu.setText("Menu");
         btnMenu.setOnClickListener(v -> {
             if (drawerLayout.isDrawerOpen(GravityCompat.END))
                 drawerLayout.closeDrawer(GravityCompat.END);
@@ -67,12 +63,6 @@ public class ViewTextFile extends AppCompatActivity {
         Button btnScrollTop    = findViewById(R.id.button6);
         Button btnScrollBottom = findViewById(R.id.button7);
         Button btnCloseMenu    = findViewById(R.id.button8);
-
-        btnFontUp.setText("Font +");
-        btnFontDown.setText("Font -");
-        btnScrollTop.setText("↑ Top");
-        btnScrollBottom.setText("↓ Bottom");
-        btnCloseMenu.setText("Close");
 
         btnFontUp.setOnClickListener(v -> {
             currentTextSizeSp = Math.min(currentTextSizeSp + 2f, 30f);
@@ -90,8 +80,6 @@ public class ViewTextFile extends AppCompatActivity {
         // ── File path ─────────────────────────────────────────────────────
         String filepath = getIntent().getStringExtra("FILE_PATH");
 
-        // Share button needs the filepath
-        btnShare.setText("Share");
         btnShare.setOnClickListener(v -> shareFile(filepath));
 
         if (filepath == null) return;

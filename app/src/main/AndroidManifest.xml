@@ -47,7 +47,9 @@
 
         <activity android:name=".CustomizationMenu" />
         <activity android:name=".CustomizeNavActivity" />
-        <activity android:name=".ViewTextFile" />
+        <activity
+            android:name=".ViewTextFile"
+            android:theme="@style/Theme.SimpleFiles.NoActionBar" />
 
         <!-- ── New: File Browser ─────────────────────────────────────────── -->
 

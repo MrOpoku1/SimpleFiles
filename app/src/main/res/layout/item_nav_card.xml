@@ -41,12 +41,12 @@
 
         <Button
             android:id="@+id/btnSettings"
-            android:layout_width="52dp"
+            android:layout_width="62dp"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
+            android:background="@drawable/btn_dark_rounded"
             android:text="Edit"
             android:textSize="10sp"
-            android:background="@drawable/btn_dark_rounded"
             app:backgroundTint="@null"
             tools:ignore="TouchTargetSizeCheck" />
 
